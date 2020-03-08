@@ -873,60 +873,97 @@ export namespace Typeform {
         description?: string
       }[]
     }
-    answers?: {
-      field?: {
-        /**
-         * The unique id of the form field the answer refers to.
-         */
-        id?: string
-        /**
-         * The field's type in the original form.
-         */
-        type?: string
-        /**
-         * The reference for the question the answer relates to. Use the `ref` value to match answers with questions.
-         * The Responses payload only includes `ref` for the fields where you specified them when you created the form.
-         */
-        ref?: string
-        /**
-         * The form field's title which the answer is related to.
-         */
-        title?: string
-      }
-      /**
-       * The answer-field's type.
-       */
-      type?: 'choice' | 'choices' | 'date' | 'email' | 'url' | 'file_url' | 'number' | 'boolean' | 'text' | 'payment'
-      /**
-       * Represents single choice answers for dropdown-like fields.
-       */
-      choice?: {
-        label?: string
-        other?: string
-      }
-      /**
-       * Represents multiple choice answers.
-       */
-      choices?: {
-        labels?: string[]
-        other?: string
-      }
-      date?: string
-      email?: string
-      file_url?: string
-      number?: number
-      boolean?: boolean
-      text?: string
-      url?: string
-      payment?: {
-        amount?: string
-        last4?: string
-        name?: string
-      }
-    }[]
+    answers?: Answer[]
     calculated?: {
       score?: number
     }
+  }
+  export type Answer = ChoiceAnswer | ChoicesAnswer | DateAnswer | EmailAnswer | UrlAnswer | FileUrlAnswer |
+    NumberAnswer | BooleanAnswer | TextAnswer | PaymentAnswer
+  export interface ChoiceAnswer {
+    type: 'choice'
+    field?: AnswerField<'multiple_choice' | 'picture_choice'>
+    /**
+     * Represents single choice answers for dropdown-like fields.
+     */
+    choice: {
+      label?: string
+      other?: string
+    }
+  }
+  export interface ChoicesAnswer {
+    type: 'choices'
+    field?: AnswerField<'multiple_choice' | 'picture_choice'>
+    /**
+     * Represents multiple choice answers.
+     */
+    choices: {
+      labels?: string[]
+      other?: string
+    }
+  }
+  export interface DateAnswer {
+    type: 'date'
+    field?: AnswerField<'date'>
+    date: string
+  }
+  export interface EmailAnswer {
+    type: 'email'
+    field?: AnswerField<'email'>
+    email: string
+  }
+  export interface UrlAnswer {
+    type: 'url'
+    field?: AnswerField<'website'>
+    url: string
+  }
+  export interface FileUrlAnswer {
+    type: 'file_url'
+    field?: AnswerField<'file_upload'>
+    file_url: string
+  }
+  export interface NumberAnswer {
+    type: 'number'
+    field?: AnswerField<'rating' | 'opinion_scale' | 'number'>
+    number: number
+  }
+  export interface BooleanAnswer {
+    type: 'boolean'
+    field?: AnswerField<'legal' | 'yes_no'>
+    boolean: boolean
+  }
+  export interface TextAnswer {
+    type: 'text'
+    field?: AnswerField<'short_text' | 'long_text' | 'dropdown'>
+    text: string
+  }
+  export interface PaymentAnswer {
+    type: 'payment'
+    field?: AnswerField<'payment'>
+    payment: {
+      amount?: string
+      last4?: string
+      name?: string
+    }
+  }
+  export interface AnswerField<T extends string> {
+    /**
+     * The unique id of the form field the answer refers to.
+     */
+    id?: string
+    /**
+     * The field's type in the original form.
+     */
+    type?: string
+    /**
+     * The reference for the question the answer relates to. Use the `ref` value to match answers with questions.
+     * The Responses payload only includes `ref` for the fields where you specified them when you created the form.
+     */
+    ref?: string
+    /**
+     * The form field's title which the answer is related to.
+     */
+    title?: string
   }
   /**
    * Typeform Form Settings object.
